@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="CheckArguments.cs" />
     <Compile Include="Dynamic.cs" />
+    <Compile Include="ExpressionExtention.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="ISpecification.cs" />
     <Compile Include="IUnitOfWork.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="RepositoryException.cs" />
     <Compile Include="SortDirection.cs" />
     <Compile Include="Specification.cs" />
+    <Compile Include="SpecificationsExtentions.cs" />
     <Compile Include="StringExtentions.cs" />
     <Compile Include="UnitOfWork.cs" />
     <Compile Include="UnitOfWorkFactory.cs" />
