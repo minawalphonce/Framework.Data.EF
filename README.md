@@ -12,13 +12,3 @@ Install-Package Framework.Data.EF
 IRepository<User> repository = new Repository<User>(dbContext);
 ```
 dbContext is your entity framework Context. 
-#####Get
-1. Using inline specification 
-2. 
-2. Using specification class
-
-#####Insert
-
-#####Update
-
-#####Delete
