@@ -7,7 +7,7 @@ the easy way to use EntityFramework in terms of repositories and organize your q
 Install-Package Framework.Data.EF
 ```
 
-####Using without Dependency Injection
+####Using
 ```
 IRepository<User> repository = new Repository<User>(dbContext);
 ```
@@ -77,3 +77,27 @@ using(new UnitOfWork(DbContext))
  repository.Remove(new ById(1)); 
 }
 ```
+
+#### Using Dependency Injection
+The Library is ment to be used using Dependency injection, however it can work without it.
+
+You must create a registery for 3 types in your Container 
+1- Map IRepository to Repository.
+2- Map IUnitOfWorkFactory to UnitOfWorkFactory.
+3- Map DbContext to your database Context.
+
+make sure to use the same Scope / LifeTimeManager for all the 3 registry. 
+
+you can then inject IRpository<User> and IUnitOfWorkFactory from your classes constractor 
+
+to create a UnitOfWork you can use the method IUnitOfWorkFactory.Create() in the using block
+```
+using(_unitOfWorkFactory.Create())
+{
+ ...
+}
+```
+
+
+
+
