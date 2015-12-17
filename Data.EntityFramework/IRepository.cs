@@ -21,6 +21,10 @@ namespace Framework.Data.EF
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <param name="entity">The entity.</param>
         void Add(TEntity entity);
+
+        void AddOrUpdate(params TEntity[] entities);
+
+        void AddOrUpdate(Expression<Func<TEntity, object>> identifierExpression, params TEntity[] entities);
         #endregion
 
         #region [ Delete ]

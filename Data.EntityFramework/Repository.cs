@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Linq.Expressions;
@@ -45,7 +46,14 @@ namespace Framework.Data.EF
             //Check.Argument.IsNotNull(entity, "entity");
             _context.Set<TEntity>().Add(entity);
         }
-
+        public void AddOrUpdate(params TEntity[] entities)
+        {
+            _context.Set<TEntity>().AddOrUpdate(entities);
+        }
+        public void AddOrUpdate(Expression<Func<TEntity, object>> identifierExpression, params TEntity[] entities)
+        {
+            _context.Set<TEntity>().AddOrUpdate(identifierExpression, entities);
+        }
         #endregion
 
         #region [ Delete ]
