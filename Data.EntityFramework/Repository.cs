@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper.QueryableExtensions;
 using System.Linq.Dynamic;
+using AutoMapper;
 
 namespace Framework.Data.EF
 {
@@ -19,8 +20,9 @@ namespace Framework.Data.EF
         #region Fields
 
         private readonly DbContext _context;
+        private readonly IConfigurationProvider _mapperConfig;
 
-        internal DbContext Context { get { return _context; } }
+        internal DbContext Context => _context;
 
         #endregion Fields
 
@@ -30,10 +32,15 @@ namespace Framework.Data.EF
         /// Initializes a new instance of the <see cref="GenericRepository&lt;TEntity&gt;"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
-        public Repository(DbContext context)
+        public Repository(
+            DbContext context,
+            IConfigurationProvider mapperConfig
+            )
         {
             Check.Argument.IsNotNull(context, "context");
+            Check.Argument.IsNotNull(mapperConfig, "mapperConfig");
             _context = context;
+            _mapperConfig = mapperConfig;
         }
 
         #endregion Constructors
@@ -115,7 +122,7 @@ namespace Framework.Data.EF
         {
             try
             {
-                return GetQuery(criteria).Project().To<TSelectEntity>(parameters).SingleOrDefault();
+                return GetQuery(criteria).ProjectTo<TSelectEntity>(_mapperConfig, parameters).SingleOrDefault();
             }
             catch (DbEntityValidationException e)
             {
@@ -139,7 +146,7 @@ namespace Framework.Data.EF
         {
             try
             {
-                return GetQuery(criteria).Project().To<TSelectEntity>(parameters).FirstOrDefault();
+                return GetQuery(criteria).ProjectTo<TSelectEntity>(_mapperConfig, parameters).FirstOrDefault();
             }
             catch (DbEntityValidationException e)
             {
@@ -165,7 +172,7 @@ namespace Framework.Data.EF
             try
             {
                 var query = GetQuery().Where(specification.Expression);
-                return query.Project().To<TSelectEntity>(parameters).ToArray();
+                return query.ProjectTo<TSelectEntity>(_mapperConfig, parameters).ToArray();
             }
             catch (DbEntityValidationException e)
             {
@@ -200,7 +207,7 @@ namespace Framework.Data.EF
                     query = GetQuery().Where(specification.Expression).OrderBy(orderBy);
                 else
                     query = GetQuery().Where(specification.Expression).OrderByDescending(orderBy);
-                return query.Project().To<TSelectEntity>(parameters).ToArray();
+                return query.ProjectTo<TSelectEntity>(_mapperConfig, parameters).ToArray();
             }
             catch (DbEntityValidationException e)
             {
@@ -226,7 +233,7 @@ namespace Framework.Data.EF
             try
             {
                 var query = GetQuery().Where(specification.Expression).OrderBy(orderby);
-                return query.Project().To<TSelectEntity>(parameters).ToArray();
+                return query.ProjectTo<TSelectEntity>(_mapperConfig, parameters).ToArray();
             }
             catch (DbEntityValidationException e)
             {
@@ -260,7 +267,7 @@ namespace Framework.Data.EF
                     query = GetQuery().Where(specification.Expression).OrderBy(orderBy).Skip((startIndex)).Take(pageSize);
                 else
                     query = GetQuery().Where(specification.Expression).OrderByDescending(orderBy).Skip((startIndex)).Take(pageSize);
-                return query.Project().To<TSelectEntity>(parameters).ToArray();
+                return query.ProjectTo<TSelectEntity>(_mapperConfig, parameters).ToArray();
             }
             catch (DbEntityValidationException e)
             {
@@ -286,7 +293,7 @@ namespace Framework.Data.EF
             try
             {
                 var result = GetQuery().Where(specification.Expression).OrderBy(orderBy).Skip(startIndex).Take(pageSize);
-                return result.Project().To<TSelectEntity>(parameters).ToArray();
+                return result.ProjectTo<TSelectEntity>(_mapperConfig, parameters).ToArray();
             }
             catch (DbEntityValidationException e)
             {
@@ -310,7 +317,7 @@ namespace Framework.Data.EF
         {
             try
             {
-                return GetQuery().Project().To<TSelectEntity>(parameters).ToArray();
+                return GetQuery().ProjectTo<TSelectEntity>(_mapperConfig, parameters).ToArray();
             }
             catch (DbEntityValidationException e)
             {
